@@ -39,8 +39,12 @@ def predict():
     return jsonify({'diabetes_type': int(prediction[0])})
 
 # Start the Flask app
+import os
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5002)
+    port = int(os.environ.get("PORT", 10000))  # Render sets this
+    app.run(host="0.0.0.0", port=port, debug=True)
+
 
 
 
