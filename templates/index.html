@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction</title>
+</head>
+<body>
+    <h1>Diabetes Prediction</h1>
+    <label>Age:</label>
+    <input type="number" id="age"><br>
+    <label>Glucose Level:</label>
+    <input type="number" id="glucose"><br>
+    <label>Insulin Level:</label>
+    <input type="number" id="insulin"><br>
+    <label>BMI:</label>
+    <input type="number" id="bmi"><br>
+    <button onclick="makePrediction()">Predict</button>
+    <p id="result"></p>
+
+    <script>
+        async function makePrediction() {
+            const age = parseFloat(document.getElementById('age').value);
+            const glucose = parseFloat(document.getElementById('glucose').value);
+            const insulin = parseFloat(document.getElementById('insulin').value);
+            const bmi = parseFloat(document.getElementById('bmi').value);
+
+            // Check if inputs are valid numbers
+            if (isNaN(age) || isNaN(glucose) || isNaN(insulin) || isNaN(bmi)) {
+                alert("Please enter valid numbers for all fields.");
+                return;
+            }
+
+            const response = await fetch('http://127.0.0.1:5002/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    age: age,
+                    glucose: glucose,
+                    insulin: insulin,
+                    bmi: bmi,
+                    model_type: 'naive_bayes'  // or 'perceptron'
+                })
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = 'Prediction: ' + result.diabetes_type;
+        }
+    </script>
+</body>
+</html>
